@@ -1,0 +1,306 @@
+
+{% extends "base.html" %}
+
+{% block title %}Sign In — ShopZone{% endblock %}
+
+{% block content %}
+
+<section class="login-page">
+    <div class="container login-layout">
+
+        <!-- LEFT: BRAND EXPERIENCE -->
+        <div class="login-showcase">
+
+            <div class="login-showcase-glow"></div>
+
+            <a href="/" class="login-brand">
+                <span class="login-brand-icon">S</span>
+                <span>ShopZone<span class="brand-period">.</span></span>
+            </a>
+
+            <div class="login-showcase-copy">
+                <span class="login-eyebrow">
+                    ✦ YOUR WORLD OF DISCOVERY
+                </span>
+
+                <h1>
+                    Good to see
+                    <span class="gradient-text">you again.</span>
+                </h1>
+
+                <p>
+                    Your next favorite find is waiting.
+                    Sign in and pick up right where you left off.
+                </p>
+            </div>
+
+            <div class="login-art" aria-hidden="true">
+                <div class="login-art-ring ring-back"></div>
+                <div class="login-art-ring ring-front"></div>
+
+                <div class="login-art-card">
+                    <div class="login-art-card-top">
+                        <span class="login-art-mini-logo">S</span>
+                        <span class="login-art-stars">✦ ✧ ✦</span>
+                    </div>
+
+                    <div class="login-art-orb">
+                        <span>S</span>
+                    </div>
+
+                    <span class="login-art-caption">THE SHOPZONE EXPERIENCE</span>
+                    <h2>Discover.<br>Love. Repeat.</h2>
+
+                    <div class="login-art-card-bottom">
+                        <span>YOUR NEXT FIND</span>
+                        <span>↗</span>
+                    </div>
+                </div>
+
+                <div class="login-float-tag login-float-one">
+                    <span>✦</span> Made for discovery
+                </div>
+
+                <div class="login-float-tag login-float-two">
+                    <span>↗</span> Welcome back
+                </div>
+            </div>
+
+            <div class="login-showcase-footer">
+                <span>YOUR STYLE. YOUR FINDS. YOUR SHOPZONE.</span>
+                <span>© 2026</span>
+            </div>
+        </div>
+
+
+        <!-- RIGHT: LOGIN FORM -->
+        <div class="login-form-side">
+            <div class="login-form-card">
+
+                <div class="login-mobile-brand">
+                    <span class="login-brand-icon">S</span>
+                    <span>ShopZone<span class="brand-period">.</span></span>
+                </div>
+
+                <div class="login-form-heading">
+                    <span class="form-eyebrow">YOUR ACCOUNT</span>
+                    <h2>Welcome <span class="gradient-text">back.</span></h2>
+                    <p>Enter your details to sign in to your account.</p>
+                </div>
+
+                <div
+                    id="message"
+                    class="auth-message"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></div>
+
+                <form id="loginForm">
+
+                    <div class="form-group login-field">
+                        <label for="username">Username</label>
+
+                        <div class="login-input-wrap">
+                            <span class="login-input-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.7"/>
+                                    <path d="M4 21c0-4.2 3.2-7 8-7s8 2.8 8 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                                </svg>
+                            </span>
+
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                placeholder="Enter your username"
+                                autocomplete="username"
+                                required
+                            >
+                        </div>
+                    </div>
+
+
+                    <div class="form-group login-field">
+                        <div class="login-label-row">
+                            <label for="password">Password</label>
+                            <span class="login-private-note">PRIVATE & SECURE</span>
+                        </div>
+
+                        <div class="login-input-wrap">
+                            <span class="login-input-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <rect x="4" y="10" width="16" height="11" rx="2.5" stroke="currentColor" stroke-width="1.7"/>
+                                    <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                                    <circle cx="12" cy="15" r="1.2" fill="currentColor"/>
+                                </svg>
+                            </span>
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                id="togglePassword"
+                                class="password-toggle"
+                                aria-label="Show password"
+                            >
+                                Show
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn auth-btn login-submit"
+                        id="loginButton"
+                    >
+                        <span id="loginButtonText">Sign in to ShopZone</span>
+                        <span class="login-submit-arrow" aria-hidden="true">→</span>
+                    </button>
+
+                </form>
+
+                <div class="login-security-note">
+                    <span class="security-check">✓</span>
+                    <span>Your account details are handled securely.</span>
+                </div>
+
+                <div class="login-or">
+                    <span></span>
+                    <p>NEW TO SHOPZONE?</p>
+                    <span></span>
+                </div>
+
+                <a href="/signup/" class="login-create-account">
+                    Create your account <span aria-hidden="true">↗</span>
+                </a>
+
+                <a href="/" class="login-back-home">
+                    <span aria-hidden="true">←</span> Back to discovering
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const loginForm = document.getElementById("loginForm");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const message = document.getElementById("message");
+    const loginButton = document.getElementById("loginButton");
+    const loginButtonText = document.getElementById("loginButtonText");
+    const togglePassword = document.getElementById("togglePassword");
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = "auth-message " + type;
+        message.hidden = false;
+    }
+
+    togglePassword.addEventListener("click", function () {
+        const isPassword = passwordInput.type === "password";
+
+        passwordInput.type = isPassword ? "text" : "password";
+        togglePassword.textContent = isPassword ? "Hide" : "Show";
+        togglePassword.setAttribute(
+            "aria-label",
+            isPassword ? "Hide password" : "Show password"
+        );
+    });
+
+    loginForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+
+        if (!username || !password) {
+            showMessage("Please enter your username and password.", "error");
+            return;
+        }
+
+        loginButton.disabled = true;
+        loginButtonText.textContent = "Signing you in...";
+        message.hidden = true;
+
+        try {
+            const response = await fetch("/api/auth/login/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                showMessage(
+                    data.error ||
+                    data.detail ||
+                    "Login failed. Check your details and try again.",
+                    "error"
+                );
+                return;
+            }
+
+            if (!data.access) {
+                showMessage(
+                    "Login response did not include an access token. Please check your API response.",
+                    "error"
+                );
+                return;
+            }
+
+            localStorage.setItem("access", data.access);
+
+            if (data.refresh) {
+                localStorage.setItem("refresh", data.refresh);
+            }
+
+            showMessage("Login successful! Welcome back.", "success");
+            loginButtonText.textContent = "You're signed in ✓";
+
+            window.setTimeout(function () {
+                window.location.href = "/";
+            }, 700);
+
+        } catch (error) {
+            console.error("Login error:", error);
+
+            showMessage(
+                "Unable to connect to ShopZone. Please try again.",
+                "error"
+            );
+
+        } finally {
+            loginButton.disabled = false;
+
+            if (loginButtonText.textContent === "Signing you in...") {
+                loginButtonText.textContent = "Sign in to ShopZone";
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
+    

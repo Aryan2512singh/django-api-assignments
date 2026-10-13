@@ -1,0 +1,93 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#090b14">
+    <meta name="description" content="Discover your next favorite products at ShopZone.">
+
+    <title>{% block title %}ShopZone — Shop Beyond Ordinary{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="container navbar-content">
+
+        <a href="/" class="logo" aria-label="ShopZone home">
+            ShopZone
+        </a>
+
+        <nav aria-label="Main navigation">
+            <a href="/" {% if request.path == "/" %}aria-current="page"{% endif %}>
+                Discover
+            </a>
+
+            <a href="/#products">
+                Collections
+            </a>
+
+            <a href="/cart/" {% if request.path|slice:":6" == "/cart/" %}aria-current="page"{% endif %}>
+                Cart <span aria-hidden="true">↗</span>
+            </a>
+
+            <a href="/orders/" {% if request.path == "/orders/" %}aria-current="page"{% endif %}>
+                My Orders
+            </a>
+
+            <a href="/profile/" {% if request.path == "/profile/" %}aria-current="page"{% endif %}>
+                Account
+            </a>
+
+            <a href="/login/" class="nav-cta">
+                Sign in <span aria-hidden="true">→</span>
+            </a>
+        </nav>
+
+    </div>
+</header>
+
+<main id="main-content">
+    {% block content %}
+    {% endblock %}
+</main>
+
+<footer class="footer">
+    <div class="container footer-content">
+
+        <div class="footer-brand">
+            <a href="/" class="logo">ShopZone</a>
+            <p>Your next favorite thing is just around the corner.</p>
+        </div>
+
+        <div class="footer-links">
+            <a href="/">Discover</a>
+            <a href="/cart/">Your cart</a>
+            <a href="/orders/">Your orders</a>
+            <a href="/profile/">Your account</a>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 ShopZone. Made for the way you shop.</p>
+            <p>Designed for a better shopping experience.</p>
+        </div>
+
+    </div>
+</footer>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>
+

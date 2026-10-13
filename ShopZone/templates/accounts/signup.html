@@ -1,0 +1,439 @@
+
+{% extends "base.html" %}
+
+{% block title %}Create Account — ShopZone{% endblock %}
+
+{% block content %}
+
+<section class="signup-page">
+    <div class="container signup-layout">
+
+        <!-- LEFT: BRAND PANEL -->
+        <div class="signup-showcase">
+
+            <a href="/" class="login-brand">
+                <span class="login-brand-icon">S</span>
+                <span>ShopZone<span class="brand-period">.</span></span>
+            </a>
+
+            <div class="signup-showcase-copy">
+                <span class="login-eyebrow">✦ YOUR JOURNEY STARTS HERE</span>
+
+                <h1>
+                    Make room for
+                    <span class="gradient-text">something great.</span>
+                </h1>
+
+                <p>
+                    Create your account and discover a shopping
+                    experience made for finding your next favorite thing.
+                </p>
+            </div>
+
+            <div class="signup-art" aria-hidden="true">
+                <div class="signup-art-orbit signup-orbit-one"></div>
+                <div class="signup-art-orbit signup-orbit-two"></div>
+
+                <div class="signup-glass-card">
+                    <div class="signup-glass-top">
+                        <span class="login-art-mini-logo">S</span>
+                        <span>THE NEW CHAPTER</span>
+                    </div>
+
+                    <div class="signup-gift-icon">✦</div>
+
+                    <span class="signup-card-caption">WELCOME TO SHOPZONE</span>
+                    <h2>Your next<br>favorite awaits.</h2>
+
+                    <div class="signup-card-bottom">
+                        <span>DISCOVER YOUR WORLD</span>
+                        <span>↗</span>
+                    </div>
+                </div>
+
+                <div class="signup-floating signup-float-top">
+                    <span>✧</span> A world of possibilities
+                </div>
+
+                <div class="signup-floating signup-float-bottom">
+                    <span>✓</span> Your journey starts now
+                </div>
+            </div>
+
+            <div class="login-showcase-footer">
+                <span>DISCOVER. LOVE. REPEAT.</span>
+                <span>© 2026</span>
+            </div>
+        </div>
+
+
+        <!-- RIGHT: SIGNUP FORM -->
+        <div class="signup-form-side">
+
+            <div class="signup-form-card">
+
+                <div class="login-mobile-brand">
+                    <span class="login-brand-icon">S</span>
+                    <span>ShopZone<span class="brand-period">.</span></span>
+                </div>
+
+                <div class="signup-heading">
+                    <span class="form-eyebrow">JOIN THE COMMUNITY</span>
+                    <h2>Create your <span class="gradient-text">account.</span></h2>
+                    <p>Just a few details to get you started.</p>
+                </div>
+
+                <div
+                    id="message"
+                    class="auth-message"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></div>
+
+                <form id="signupForm">
+
+                    <div class="form-group signup-field">
+                        <label for="username">Username</label>
+
+                        <div class="login-input-wrap">
+                            <span class="login-input-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="8" r="4"
+                                        stroke="currentColor" stroke-width="1.7"/>
+                                    <path d="M4 21c0-4.2 3.2-7 8-7s8 2.8 8 7"
+                                        stroke="currentColor" stroke-width="1.7"
+                                        stroke-linecap="round"/>
+                                </svg>
+                            </span>
+
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                placeholder="Choose a username"
+                                autocomplete="username"
+                                minlength="3"
+                                required
+                            >
+                        </div>
+                    </div>
+
+
+                    <div class="form-group signup-field">
+                        <label for="email">Email address</label>
+
+                        <div class="login-input-wrap">
+                            <span class="login-input-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <rect x="3" y="5" width="18" height="14"
+                                        rx="2.5" stroke="currentColor"
+                                        stroke-width="1.7"/>
+                                    <path d="m4 7 8 6 8-6"
+                                        stroke="currentColor" stroke-width="1.7"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                required
+                            >
+                        </div>
+                    </div>
+
+
+                    <div class="form-group signup-field">
+                        <label for="password">Create password</label>
+
+                        <div class="login-input-wrap">
+                            <span class="login-input-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <rect x="4" y="10" width="16" height="11"
+                                        rx="2.5" stroke="currentColor"
+                                        stroke-width="1.7"/>
+                                    <path d="M8 10V7a4 4 0 0 1 8 0v3"
+                                        stroke="currentColor" stroke-width="1.7"
+                                        stroke-linecap="round"/>
+                                </svg>
+                            </span>
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="At least 8 characters"
+                                autocomplete="new-password"
+                                minlength="8"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                data-target="password"
+                                aria-label="Show password"
+                            >Show</button>
+                        </div>
+
+                        <div class="signup-password-hint">
+                            Use at least 8 characters.
+                        </div>
+                    </div>
+
+
+                    <div class="form-group signup-field">
+                        <label for="confirmPassword">Confirm password</label>
+
+                        <div class="login-input-wrap">
+                            <span class="login-input-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <rect x="4" y="10" width="16" height="11"
+                                        rx="2.5" stroke="currentColor"
+                                        stroke-width="1.7"/>
+                                    <path d="M8 10V7a4 4 0 0 1 8 0v3"
+                                        stroke="currentColor" stroke-width="1.7"
+                                        stroke-linecap="round"/>
+                                    <path d="m9 15 2 2 4-4"
+                                        stroke="currentColor" stroke-width="1.7"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                placeholder="Enter your password again"
+                                autocomplete="new-password"
+                                minlength="8"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                data-target="confirmPassword"
+                                aria-label="Show confirm password"
+                            >Show</button>
+                        </div>
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn auth-btn signup-submit"
+                        id="signupButton"
+                    >
+                        <span id="signupButtonText">Create my account</span>
+                        <span aria-hidden="true">→</span>
+                    </button>
+
+                </form>
+
+                <div class="signup-security-note">
+                    <span class="security-check">✓</span>
+                    <span>One more step: verify your email with an OTP.</span>
+                </div>
+
+                <div class="signup-divider">
+                    <span></span>
+                    <p>ALREADY A MEMBER?</p>
+                    <span></span>
+                </div>
+
+                <a href="/login/" class="login-create-account">
+                    Sign in to your account <span aria-hidden="true">↗</span>
+                </a>
+
+                <a href="/" class="login-back-home">
+                    <span aria-hidden="true">←</span> Back to ShopZone
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const signupForm = document.getElementById("signupForm");
+    const usernameInput = document.getElementById("username");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+    const message = document.getElementById("message");
+    const signupButton = document.getElementById("signupButton");
+    const signupButtonText = document.getElementById("signupButtonText");
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = "auth-message " + type;
+        message.hidden = false;
+    }
+
+    function getErrorText(value) {
+        if (Array.isArray(value)) {
+            return value.join(" ");
+        }
+
+        if (typeof value === "string") {
+            return value;
+        }
+
+        return "";
+    }
+
+    function getApiError(data, fallback) {
+        if (!data || typeof data !== "object") {
+            return fallback;
+        }
+
+        for (const field of ["username", "email", "password", "detail", "error"]) {
+            const text = getErrorText(data[field]);
+
+            if (text) {
+                return text;
+            }
+        }
+
+        return fallback;
+    }
+
+    // Show or hide either password field.
+    document.querySelectorAll(".password-toggle").forEach(function (button) {
+        button.addEventListener("click", function () {
+            const input = document.getElementById(button.dataset.target);
+            const shouldShow = input.type === "password";
+
+            input.type = shouldShow ? "text" : "password";
+            button.textContent = shouldShow ? "Hide" : "Show";
+            button.setAttribute(
+                "aria-label",
+                shouldShow ? "Hide password" : "Show password"
+            );
+        });
+    });
+
+    signupForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const username = usernameInput.value.trim();
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        if (password.length < 8) {
+            showMessage(
+                "Your password must contain at least 8 characters.",
+                "error"
+            );
+            passwordInput.focus();
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            showMessage("Your passwords do not match.", "error");
+            confirmPasswordInput.focus();
+            return;
+        }
+
+        signupButton.disabled = true;
+        signupButtonText.textContent = "Creating account...";
+        message.hidden = true;
+
+        try {
+            // Step 1: Create the account.
+            const response = await fetch("/api/auth/signup/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                showMessage(
+                    getApiError(data, "Unable to create account. Please try again."),
+                    "error"
+                );
+                return;
+            }
+
+            // Remember which account needs OTP verification.
+            localStorage.setItem("pending_username", username);
+
+            // Step 2: Ask the backend to send the OTP.
+            signupButtonText.textContent = "Sending verification code...";
+
+            const otpResponse = await fetch("/api/auth/send-otp/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username
+                })
+            });
+
+            const otpData = await otpResponse.json();
+
+            if (!otpResponse.ok) {
+                showMessage(
+                    "Your account was created, but the OTP could not be sent. " +
+                    getApiError(otpData, "Please try again or use the resend option on the verification page if available."),
+                    "error"
+                );
+                return;
+            }
+
+            showMessage(
+                "Account created! Your verification code has been requested.",
+                "success"
+            );
+
+            signupButtonText.textContent = "Account created ✓";
+
+            window.setTimeout(function () {
+                window.location.href = "/verify-otp/";
+            }, 900);
+
+        } catch (error) {
+            console.error("Signup error:", error);
+
+            showMessage(
+                "Unable to connect to ShopZone. Please try again.",
+                "error"
+            );
+
+        } finally {
+            signupButton.disabled = false;
+
+            if (
+                signupButtonText.textContent === "Creating account..." ||
+                signupButtonText.textContent === "Sending verification code..."
+            ) {
+                signupButtonText.textContent = "Create my account";
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

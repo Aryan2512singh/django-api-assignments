@@ -1,0 +1,349 @@
+
+{% extends "base.html" %}
+
+{% block title %}Verify Account — ShopZone{% endblock %}
+
+{% block content %}
+<section class="otp-page">
+    <div class="otp-glow otp-glow-left"></div>
+    <div class="otp-glow otp-glow-right"></div>
+
+    <div class="otp-layout">
+
+        <!-- Left: Animated visual -->
+        <div class="otp-showcase">
+            <a href="/" class="otp-brand">
+                <span class="otp-brand-icon">S</span>
+                <span>ShopZone<span class="otp-brand-dot">.</span></span>
+            </a>
+
+            <div class="otp-showcase-copy">
+                <span class="otp-eyebrow">
+                    <span class="otp-live-dot"></span>
+                    ONE LAST STEP
+                </span>
+
+                <h1>Your account.<br>
+                    <span class="otp-gradient">Your world.</span>
+                </h1>
+
+                <p>
+                    Verify your email and unlock a smoother,
+                    more personal shopping experience.
+                </p>
+            </div>
+
+            <div class="otp-visual">
+                <div class="otp-orbit otp-orbit-one"></div>
+                <div class="otp-orbit otp-orbit-two"></div>
+
+                <div class="otp-security-card">
+                    <div class="otp-card-top">
+                        <span>SHOPZONE SECURITY</span>
+                        <span class="otp-lock">◇</span>
+                    </div>
+
+                    <div class="otp-shield">
+                        <svg viewBox="0 0 100 100" fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             aria-hidden="true">
+                            <path d="M50 9L82 22V45C82 66 69 82 50 91C31 82 18 66 18 45V22L50 9Z"
+                                  stroke="url(#shieldGradient)"
+                                  stroke-width="3"/>
+                            <path d="M34 50L45 61L67 38"
+                                  stroke="#8BE9FF"
+                                  stroke-width="5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="shieldGradient"
+                                                x1="18" y1="9"
+                                                x2="82" y2="91">
+                                    <stop stop-color="#B99AFF"/>
+                                    <stop offset="1" stop-color="#63E6FA"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+
+                    <h3>Identity protected</h3>
+                    <p>A little verification. A lot more confidence.</p>
+
+                    <div class="otp-card-status">
+                        <span class="otp-status-dot"></span>
+                        SECURE VERIFICATION
+                        <span class="otp-status-check">✓</span>
+                    </div>
+                </div>
+
+                <div class="otp-float-tag otp-tag-top">
+                    <span>✦</span> Your account, secured
+                </div>
+
+                <div class="otp-float-tag otp-tag-bottom">
+                    <span>✓</span> Almost there!
+                </div>
+            </div>
+
+            <div class="otp-showcase-footer">
+                <span>SHOP SMARTER. LIVE BETTER.</span>
+                <span>01 — 01</span>
+            </div>
+        </div>
+
+        <!-- Right: Verification form -->
+        <div class="otp-form-side">
+            <div class="otp-form-card">
+
+                <div class="otp-mobile-brand">
+                    <a href="/" class="otp-brand">
+                        <span class="otp-brand-icon">S</span>
+                        <span>ShopZone<span class="otp-brand-dot">.</span></span>
+                    </a>
+                </div>
+
+                <div class="otp-icon-circle">
+                    <svg viewBox="0 0 24 24" fill="none"
+                         xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true">
+                        <rect x="3" y="5" width="18" height="14" rx="3"
+                              stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M4 7L12 13L20 7"
+                              stroke="currentColor" stroke-width="1.6"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+                <span class="otp-form-eyebrow">EMAIL VERIFICATION</span>
+
+                <h2>Check your <span class="otp-gradient">inbox.</span></h2>
+
+                <p class="otp-description">
+                    Enter the one-time password sent to your registered
+                    email address to verify your account.
+                </p>
+
+                <div id="message"
+                     class="auth-message"
+                     role="status"
+                     aria-live="polite"
+                     hidden></div>
+
+                <form id="otpForm" class="otp-form">
+
+                    <div class="otp-field">
+                        <label for="username">YOUR USERNAME</label>
+
+                        <div class="otp-input-wrap">
+                            <span class="otp-input-symbol" aria-hidden="true">＠</span>
+                            <input type="text"
+                                   id="username"
+                                   name="username"
+                                   placeholder="Your username"
+                                   autocomplete="username"
+                                   readonly
+                                   required>
+                            <span class="otp-verified-mark" aria-hidden="true">✓</span>
+                        </div>
+                    </div>
+
+                    <div class="otp-field">
+                        <div class="otp-label-row">
+                            <label for="otp">ONE-TIME PASSWORD</label>
+                            <span class="otp-six-digit">6 DIGITS</span>
+                        </div>
+
+                        <div class="otp-input-wrap">
+                            <span class="otp-input-symbol" aria-hidden="true">✳</span>
+                            <input type="text"
+                                   id="otp"
+                                   name="otp"
+                                   placeholder="Enter your OTP"
+                                   inputmode="numeric"
+                                   autocomplete="one-time-code"
+                                   maxlength="6"
+                                   pattern="[0-9]{6}"
+                                   required>
+                        </div>
+
+                        <p class="otp-hint">
+                            Enter the 6-digit code from your email.
+                        </p>
+                    </div>
+
+                    <button type="submit" id="verifyButton" class="otp-submit">
+                        <span id="verifyButtonText">Verify my account</span>
+                        <span class="otp-arrow" aria-hidden="true">→</span>
+                    </button>
+                </form>
+
+                <div class="otp-resend-panel">
+                    <div class="otp-resend-icon" aria-hidden="true">↻</div>
+
+                    <div class="otp-resend-copy">
+                        <strong>Didn't receive the code?</strong>
+                        <p>Check your spam folder or request a new OTP.</p>
+                    </div>
+
+                    <button type="button"
+                            id="resendButton"
+                            class="otp-resend-button">
+                        Resend
+                    </button>
+                </div>
+
+                <div class="otp-divider"><span>OR</span></div>
+
+                <a href="/login/" class="otp-back-link">
+                    <span aria-hidden="true">←</span> Back to login
+                </a>
+
+                <p class="otp-security-note">
+                    <span aria-hidden="true">♢</span>
+                    Your verification helps keep your account secure.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(() => {
+    const usernameInput = document.getElementById("username");
+    const otpInput = document.getElementById("otp");
+    const otpForm = document.getElementById("otpForm");
+    const message = document.getElementById("message");
+    const verifyButton = document.getElementById("verifyButton");
+    const verifyButtonText = document.getElementById("verifyButtonText");
+    const resendButton = document.getElementById("resendButton");
+
+    const pendingUsername = localStorage.getItem("pending_username");
+
+    if (!pendingUsername) {
+        window.location.replace("/signup/");
+        return;
+    }
+
+    usernameInput.value = pendingUsername;
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = "auth-message " + type;
+        message.hidden = false;
+    }
+
+    async function readResponse(response) {
+        const text = await response.text();
+
+        try {
+            return text ? JSON.parse(text) : {};
+        } catch {
+            return { detail: "The server returned an unexpected response." };
+        }
+    }
+
+    function getError(data, fallback) {
+        for (const key of ["error", "detail", "otp", "username", "non_field_errors"]) {
+            if (data[key]) {
+                return Array.isArray(data[key])
+                    ? data[key].join(" ")
+                    : String(data[key]);
+            }
+        }
+        return fallback;
+    }
+
+    otpInput.addEventListener("input", () => {
+        otpInput.value = otpInput.value.replace(/\D/g, "").slice(0, 6);
+    });
+
+    otpForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const username = usernameInput.value.trim();
+        const otp = otpInput.value.trim();
+
+        if (!/^\d{6}$/.test(otp)) {
+            showMessage("Please enter a valid 6-digit OTP.", "error");
+            otpInput.focus();
+            return;
+        }
+
+        verifyButton.disabled = true;
+        verifyButtonText.textContent = "Verifying...";
+        showMessage("Checking your verification code...", "info");
+
+        try {
+            const response = await fetch("/api/auth/verify-otp/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username: username, otp: otp })
+            });
+
+            const data = await readResponse(response);
+
+            if (!response.ok) {
+                showMessage(getError(data, "Invalid or expired OTP."), "error");
+                return;
+            }
+
+            localStorage.removeItem("pending_username");
+
+            showMessage(
+                "Your account is verified! Redirecting you to login...",
+                "success"
+            );
+
+            window.setTimeout(() => {
+                window.location.href = "/login/";
+            }, 1200);
+
+        } catch (error) {
+            console.error("OTP verification error:", error);
+            showMessage(
+                "Unable to connect to the server. Please try again.",
+                "error"
+            );
+        } finally {
+            verifyButton.disabled = false;
+            verifyButtonText.textContent = "Verify my account";
+        }
+    });
+
+    resendButton.addEventListener("click", async () => {
+        resendButton.disabled = true;
+        resendButton.textContent = "Sending...";
+
+        try {
+            const response = await fetch("/api/auth/send-otp/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username: pendingUsername })
+            });
+
+            const data = await readResponse(response);
+
+            if (!response.ok) {
+                showMessage(getError(data, "Unable to send a new OTP."), "error");
+                return;
+            }
+
+            showMessage("A new OTP has been requested. Check your email.", "success");
+
+        } catch (error) {
+            console.error("OTP resend error:", error);
+            showMessage(
+                "Unable to connect to the server. Please try again.",
+                "error"
+            );
+        } finally {
+            resendButton.disabled = false;
+            resendButton.textContent = "Resend";
+        }
+    });
+})();
+</script>
+{% endblock %}

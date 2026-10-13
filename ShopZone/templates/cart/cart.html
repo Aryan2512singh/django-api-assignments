@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+
+{% block title %}Your Cart | ShopZone{% endblock %}
+
+{% block content %}
+<section class="cart-section sz-cart-page">
+    <div class="container">
+
+        <div class="sz-cart-hero">
+            <div>
+                <span class="sz-cart-eyebrow">YOUR SHOPPING SPACE</span>
+                <h1>Your cart<span class="sz-gradient-text">.</span></h1>
+                <p>Your next favorite thing is almost yours.</p>
+            </div>
+            <a href="/" class="sz-back-shop">← Continue shopping</a>
+        </div>
+
+        <div class="sz-cart-progress">
+            <div class="sz-progress-step active">
+                <span>01</span>
+                <div><strong>Your cart</strong><small>Review your items</small></div>
+            </div>
+            <div class="sz-progress-line"></div>
+            <div class="sz-progress-step">
+                <span>02</span>
+                <div><strong>Checkout</strong><small>Delivery details</small></div>
+            </div>
+            <div class="sz-progress-line"></div>
+            <div class="sz-progress-step">
+                <span>03</span>
+                <div><strong>Complete</strong><small>Your order</small></div>
+            </div>
+        </div>
+
+        <div id="cartMessage" class="sz-cart-message" role="status" aria-live="polite"></div>
+
+        <div id="cartContainer">
+            <div class="sz-cart-loading">
+                <div class="sz-loader"></div>
+                <p>Preparing your shopping space...</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+"use strict";
+
+function escapeCartHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function(char) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[char];
+    });
+}
+
+function formatCartPrice(value) {
+    const amount = Number(value);
+    return Number.isFinite(amount)
+        ? amount.toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })
+        : "0.00";
+}
+
+function getCartToken() {
+    return localStorage.getItem("access");
+}
+
+async function cartRequest(url, options = {}) {
+    const token = getCartToken();
+
+    if (!token) {
+        throw new Error("Please log in to manage your cart.");
+    }
+
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            ...(options.body ? {"Content-Type": "application/json"} : {}),
+            ...(options.headers || {}),
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    if (response.status === 401) {
+        throw new Error("Your session may have expired. Please log in again.");
+    }
+
+    let data = {};
+    try {
+        data = await response.json();
+    } catch (_) {
+        // The API may return an empty response.
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            data.error ||
+            data.detail ||
+            data.message ||
+            "The request could not be completed."
+        );
+    }
+
+    return data;
+}
+
+async function loadCart() {
+    const container = document.getElementById("cartContainer");
+
+    if (!getCartToken()) {
+        container.innerHTML = `
+            <div class="sz-cart-empty">
+                <div class="sz-empty-icon">↗</div>
+                <span class="sz-cart-eyebrow">WELCOME BACK</span>
+                <h2>Your cart is waiting.</h2>
+                <p>Sign in to view your saved products and continue shopping.</p>
+                <a href="/login/" class="sz-cart-primary">Sign in to continue <span>→</span></a>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="sz-cart-loading">
+            <div class="sz-loader"></div>
+            <p>Loading your items...</p>
+        </div>`;
+
+    try {
+        const data = await cartRequest("/api/cart/");
+        displayCart(data);
+    } catch (error) {
+        console.error("Cart loading error:", error);
+
+        container.innerHTML = `
+            <div class="sz-cart-error">
+                <div class="sz-empty-icon">!</div>
+                <h2>We couldn't load your cart.</h2>
+                <p>${escapeCartHTML(error.message)}</p>
+                <button class="sz-cart-primary" onclick="loadCart()">Try again ↻</button>
+                <p class="sz-small-note">If your session expired, please <a href="/login/">sign in again</a>.</p>
+            </div>`;
+    }
+}
+
+function displayCart(data) {
+    const container = document.getElementById("cartContainer");
+    const items = Array.isArray(data.items) ? data.items : [];
+
+    if (items.length === 0) {
+        container.innerHTML = `
+            <div class="sz-cart-empty">
+                <div class="sz-empty-icon sz-bag-icon">🛍</div>
+                <span class="sz-cart-eyebrow">ROOM FOR SOMETHING GREAT</span>
+                <h2>Your cart is empty.</h2>
+                <p>Explore the collection and add something you love.</p>
+                <a href="/" class="sz-cart-primary">Explore products <span>→</span></a>
+            </div>`;
+        return;
+    }
+
+    const itemCards = items.map(function(item, index) {
+        const id = Number(item.id);
+        const quantity = Number(item.quantity);
+        const price = Number(item.price);
+        const total = Number(item.total_price);
+        const validId = Number.isSafeInteger(id) && id > 0;
+        const validQuantity = Number.isSafeInteger(quantity) && quantity > 0;
+        const safeName = escapeCartHTML(item.product_name || "Product");
+
+        return `
+            <article class="sz-cart-item" style="--item-index:${Math.min(index, 8)}">
+                <div class="sz-product-art">
+                    <div class="sz-product-art-glow"></div>
+                    <span>${String(index + 1).padStart(2, "0")}</span>
+                    <div class="sz-product-art-symbol">SZ</div>
+                    <small>SHOPZONE</small>
+                </div>
+
+                <div class="sz-product-info">
+                    <span class="sz-product-label">YOUR SELECTION</span>
+                    <h2>${safeName}</h2>
+                    <p class="sz-unit-price">₹${formatCartPrice(price)} <span>/ unit</span></p>
+
+                    <div class="sz-quantity-box">
+                        <button
+                            type="button"
+                            aria-label="Decrease quantity of ${safeName}"
+                            ${!validId || !validQuantity || quantity <= 1 ? "disabled" : ""}
+                            onclick="changeQuantity(${validId ? id : 0}, ${validQuantity ? quantity - 1 : 0})">−</button>
+
+                        <span aria-label="Quantity">${validQuantity ? quantity : "—"}</span>
+
+                        <button
+                            type="button"
+                            aria-label="Increase quantity of ${safeName}"
+                            ${!validId || !validQuantity || quantity >= 99 ? "disabled" : ""}
+                            onclick="changeQuantity(${validId ? id : 0}, ${validQuantity ? quantity + 1 : 0})">+</button>
+                    </div>
+                </div>
+
+                <div class="sz-item-actions">
+                    <span class="sz-item-total-label">ITEM TOTAL</span>
+                    <strong class="sz-item-total">₹${formatCartPrice(total)}</strong>
+                    <button type="button" class="sz-remove-btn"
+                        ${!validId ? "disabled" : ""}
+                        onclick="removeItem(${validId ? id : 0})">
+                        <span aria-hidden="true">×</span> Remove
+                    </button>
+                </div>
+            </article>`;
+    }).join("");
+
+    const itemCount = items.reduce(function(sum, item) {
+        const quantity = Number(item.quantity);
+        return sum + (Number.isSafeInteger(quantity) && quantity > 0 ? quantity : 0);
+    }, 0);
+
+    container.innerHTML = `
+        <div class="sz-cart-layout">
+            <div class="sz-cart-main">
+                <div class="sz-items-heading">
+                    <div>
+                        <h2>Your selections <span>(${items.length})</span></h2>
+                        <p>${itemCount} item${itemCount === 1 ? "" : "s"} in your bag</p>
+                    </div>
+                    <span class="sz-bag-status"><span></span> CART ACTIVE</span>
+                </div>
+
+                <div class="sz-cart-items">${itemCards}</div>
+
+                <a href="/" class="sz-continue-bottom">← Keep exploring the collection</a>
+            </div>
+
+            <aside class="sz-order-summary">
+                <div class="sz-summary-orb"></div>
+                <span class="sz-cart-eyebrow">THE FINAL COUNT</span>
+                <h2>Order summary<span class="sz-gradient-text">.</span></h2>
+
+                <div class="sz-summary-row">
+                    <span>Products</span>
+                    <strong>${items.length}</strong>
+                </div>
+                <div class="sz-summary-row">
+                    <span>Quantity</span>
+                    <strong>${itemCount}</strong>
+                </div>
+                <div class="sz-summary-row">
+                    <span>Delivery</span>
+                    <strong class="sz-free-label">FREE*</strong>
+                </div>
+
+                <div class="sz-summary-divider"></div>
+
+                <div class="sz-summary-total">
+                    <span>Cart total</span>
+                    <strong>₹${formatCartPrice(data.total_price)}</strong>
+                </div>
+
+                <p class="sz-summary-note">Final charges are confirmed during checkout.</p>
+
+                <a href="/orders/checkout/" class="sz-cart-primary sz-checkout-link">
+                    Proceed to checkout <span>→</span>
+                </a>
+
+                <div class="sz-trust-note">
+                    <span>◇</span>
+                    <p>You're one step closer to your next favorite thing.</p>
+                </div>
+            </aside>
+        </div>`;
+
+    // Keep the checkout amount consistent with the server's total.
+    // The backend should validate stock and recalculate prices at checkout.
+}
+
+async function changeQuantity(itemId, quantity) {
+    if (!Number.isSafeInteger(itemId) || itemId < 1 ||
+        !Number.isSafeInteger(quantity) || quantity < 1 || quantity > 99) {
+        showCartMessage("Please choose a valid quantity.", "error");
+        return;
+    }
+
+    setCartBusy(true);
+
+    try {
+        await cartRequest(`/api/cart/item/${itemId}/`, {
+            method: "PUT",
+            body: JSON.stringify({quantity: quantity})
+        });
+
+        showCartMessage("Quantity updated.", "success");
+        await loadCart();
+    } catch (error) {
+        showCartMessage(error.message, "error");
+    } finally {
+        setCartBusy(false);
+    }
+}
+
+async function removeItem(itemId) {
+    if (!Number.isSafeInteger(itemId) || itemId < 1) {
+        showCartMessage("Invalid cart item.", "error");
+        return;
+    }
+
+    setCartBusy(true);
+
+    try {
+        await cartRequest(`/api/cart/item/${itemId}/remove/`, {
+            method: "DELETE"
+        });
+
+        showCartMessage("Product removed from your cart.", "success");
+        await loadCart();
+    } catch (error) {
+        showCartMessage(error.message, "error");
+    } finally {
+        setCartBusy(false);
+    }
+}
+
+function setCartBusy(busy) {
+    document.querySelectorAll(
+        ".sz-quantity-box button, .sz-remove-btn"
+    ).forEach(function(button) {
+        button.disabled = busy;
+    });
+}
+
+let cartMessageTimer;
+
+function showCartMessage(message, type) {
+    const box = document.getElementById("cartMessage");
+
+    clearTimeout(cartMessageTimer);
+    box.textContent = message;
+    box.className = `sz-cart-message ${type}`;
+    box.scrollIntoView({behavior: "smooth", block: "nearest"});
+
+    cartMessageTimer = setTimeout(function() {
+        box.textContent = "";
+        box.className = "sz-cart-message";
+    }, 3500);
+}
+
+loadCart();
+</script>
+{% endblock %}

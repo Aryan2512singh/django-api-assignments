@@ -1,0 +1,313 @@
+
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} — ShopZone{% endblock %}
+
+{% block content %}
+
+<section class="detail-page">
+    <div class="container">
+
+        <div class="detail-breadcrumb">
+            <a href="/">Discover</a>
+            <span>/</span>
+            <span>{{ product.category.name|default:"Collection" }}</span>
+            <span>/</span>
+            <span class="breadcrumb-current">{{ product.name }}</span>
+        </div>
+
+        <div class="detail-showcase">
+
+            <!-- PRODUCT IMAGE -->
+            <div class="detail-visual">
+                <div class="detail-glow"></div>
+
+                <div class="detail-image">
+                    {% if product.image %}
+                        <img
+                            src="{{ product.image.url }}"
+                            alt="{{ product.name }}"
+                        >
+                    {% else %}
+                        <div class="no-image large">
+                            <span class="no-image-symbol">S</span>
+                            <span>Image coming soon</span>
+                        </div>
+                    {% endif %}
+
+                    <span class="detail-image-label">
+                        SHOPZONE SELECT
+                    </span>
+                </div>
+
+                <div class="detail-floating-note">
+                    <span class="detail-note-icon">✦</span>
+                    <div>
+                        <strong>A find worth keeping.</strong>
+                        <p>Discover your next favorite.</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- PRODUCT INFORMATION -->
+            <div class="detail-info">
+
+                <span class="detail-eyebrow">
+                    THE SHOPZONE COLLECTION
+                </span>
+
+                <span class="category detail-category">
+                    {{ product.category.name|default:"General" }}
+                </span>
+
+                <h1>{{ product.name }}</h1>
+
+                <div class="detail-rating-note">
+                    <span>✦</span>
+                    <span>Selected for your collection</span>
+                </div>
+
+                <p class="detail-description">
+                    {{ product.description|default:"A great find from our collection." }}
+                </p>
+
+                <div class="detail-price-panel">
+                    <div>
+                        <span class="detail-price-label">OUR PRICE</span>
+                        <h2 class="detail-price">₹{{ product.price }}</h2>
+                    </div>
+
+                    <span class="detail-price-tag">SHOPZONE PICK</span>
+                </div>
+
+                <div class="detail-stock-row">
+                    <span class="stock-indicator
+                        {% if product.is_available and product.stock > 0 %}
+                            stock-available
+                        {% else %}
+                            stock-unavailable
+                        {% endif %}
+                    "></span>
+
+                    {% if product.is_available and product.stock > 0 %}
+                        <span>
+                            In stock
+                            {% if product.stock <= 5 %}
+                                · Only {{ product.stock }} left
+                            {% else %}
+                                · Ready to order
+                            {% endif %}
+                        </span>
+                    {% else %}
+                        <span>Currently unavailable</span>
+                    {% endif %}
+                </div>
+
+                <div class="detail-divider"></div>
+
+                {% if product.is_available and product.stock > 0 %}
+
+                    <div class="add-cart-area detail-cart-area">
+
+                        <label for="quantity">Quantity</label>
+
+                        <div class="detail-purchase-row">
+                            <div class="quantity-picker">
+                                <button
+                                    type="button"
+                                    id="decreaseQuantity"
+                                    aria-label="Decrease quantity"
+                                >−</button>
+
+                                <input
+                                    type="number"
+                                    id="quantity"
+                                    value="1"
+                                    min="1"
+                                    max="{{ product.stock }}"
+                                    inputmode="numeric"
+                                    aria-label="Product quantity"
+                                >
+
+                                <button
+                                    type="button"
+                                    id="increaseQuantity"
+                                    aria-label="Increase quantity"
+                                >+</button>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="btn detail-add-btn"
+                                id="addToCartButton"
+                            >
+                                <span id="addButtonText">Add to Cart</span>
+                                <span aria-hidden="true">↗</span>
+                            </button>
+                        </div>
+
+                        <p class="detail-cart-hint">
+                            Secure your pick before it's gone.
+                        </p>
+
+                        <p
+                            id="cartMessage"
+                            class="detail-cart-message"
+                            role="status"
+                            aria-live="polite"
+                        ></p>
+                    </div>
+
+                {% else %}
+
+                    <button class="btn disabled detail-add-btn" disabled>
+                        Currently Out of Stock
+                    </button>
+
+                {% endif %}
+
+                <div class="detail-benefits">
+                    <div class="detail-benefit">
+                        <span class="benefit-icon">✦</span>
+                        <div>
+                            <strong>Curated collection</strong>
+                            <p>Find something you'll love.</p>
+                        </div>
+                    </div>
+
+                    <div class="detail-benefit">
+                        <span class="benefit-icon">↗</span>
+                        <div>
+                            <strong>Easy ordering</strong>
+                            <p>Manage your order in one place.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="/" class="detail-back-link">
+                    <span aria-hidden="true">←</span> Back to all products
+                </a>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const quantityInput = document.getElementById("quantity");
+    const decreaseButton = document.getElementById("decreaseQuantity");
+    const increaseButton = document.getElementById("increaseQuantity");
+    const addButton = document.getElementById("addToCartButton");
+    const message = document.getElementById("cartMessage");
+    const buttonText = document.getElementById("addButtonText");
+
+    // These controls only exist when the product is available.
+    if (!quantityInput || !addButton) {
+        return;
+    }
+
+    const maxStock = Number(quantityInput.max);
+
+    function getQuantity() {
+        let quantity = Number.parseInt(quantityInput.value, 10);
+
+        if (!Number.isFinite(quantity)) {
+            quantity = 1;
+        }
+
+        quantity = Math.max(1, Math.min(quantity, maxStock));
+        quantityInput.value = quantity;
+
+        return quantity;
+    }
+
+    decreaseButton.addEventListener("click", function () {
+        quantityInput.value = getQuantity() - 1;
+        getQuantity();
+    });
+
+    increaseButton.addEventListener("click", function () {
+        quantityInput.value = getQuantity() + 1;
+        getQuantity();
+    });
+
+    quantityInput.addEventListener("change", getQuantity);
+
+    addButton.addEventListener("click", async function () {
+        const accessToken = localStorage.getItem("access");
+
+        if (!accessToken) {
+            message.textContent = "Please log in before adding products to your cart.";
+            message.className = "detail-cart-message message-error";
+
+            // Keep the current authentication flow.
+            window.location.href = "/login/";
+            return;
+        }
+
+        const quantity = getQuantity();
+
+        addButton.disabled = true;
+        buttonText.textContent = "Adding...";
+        message.textContent = "";
+
+        try {
+            const response = await fetch("/api/cart/add/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+                },
+                body: JSON.stringify({
+                    product_id: {{ product.id }},
+                    quantity: quantity
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                message.textContent =
+                    data.error ||
+                    data.detail ||
+                    data.message ||
+                    "Unable to add this product. Please try again.";
+
+                message.className = "detail-cart-message message-error";
+                return;
+            }
+
+            message.textContent = "Added to your cart! Taking you there...";
+            message.className = "detail-cart-message message-success";
+
+            buttonText.textContent = "Added ✓";
+
+            window.setTimeout(function () {
+                window.location.href = "/cart/";
+            }, 700);
+
+        } catch (error) {
+            console.error("Add to cart error:", error);
+
+            message.textContent =
+                "Couldn't connect to the server. Please try again.";
+
+            message.className = "detail-cart-message message-error";
+
+        } finally {
+            addButton.disabled = false;
+
+            if (buttonText.textContent === "Adding...") {
+                buttonText.textContent = "Add to Cart";
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

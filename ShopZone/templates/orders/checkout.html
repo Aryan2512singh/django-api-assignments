@@ -1,0 +1,482 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout | ShopZone{% endblock %}
+
+{% block content %}
+<section class="sz-checkout-page">
+    <div class="container">
+
+        <header class="sz-checkout-hero">
+            <div>
+                <span class="sz-checkout-eyebrow">ALMOST YOURS</span>
+                <h1>Secure your <span>order.</span></h1>
+                <p>A few details and your shopping journey moves forward.</p>
+            </div>
+            <a href="/cart/" class="sz-checkout-back">← Back to cart</a>
+        </header>
+
+        <div class="sz-checkout-progress">
+            <div class="sz-checkout-step complete">
+                <span>✓</span>
+                <div><strong>Cart</strong><small>Items selected</small></div>
+            </div>
+            <div class="sz-checkout-progress-line active"></div>
+            <div class="sz-checkout-step active">
+                <span>02</span>
+                <div><strong>Checkout</strong><small>Delivery details</small></div>
+            </div>
+            <div class="sz-checkout-progress-line"></div>
+            <div class="sz-checkout-step">
+                <span>03</span>
+                <div><strong>Order</strong><small>Confirmation</small></div>
+            </div>
+        </div>
+
+        <div id="checkoutMessage" class="sz-checkout-message"
+             role="status" aria-live="polite"></div>
+
+        <div class="sz-checkout-layout">
+
+            <div class="sz-checkout-main">
+                <form id="checkoutForm" onsubmit="placeOrder(event)">
+
+                    <section class="sz-checkout-card">
+                        <div class="sz-checkout-card-heading">
+                            <div class="sz-checkout-number">01</div>
+                            <div>
+                                <h2>Delivery information</h2>
+                                <p>Where should we deliver your order?</p>
+                            </div>
+                        </div>
+
+                        <div class="sz-checkout-fields">
+                            <div class="sz-field sz-field-full">
+                                <label for="full_name">Full name</label>
+                                <input type="text" id="full_name"
+                                       name="full_name"
+                                       placeholder="Enter your full name"
+                                       autocomplete="name"
+                                       maxlength="150" required>
+                            </div>
+
+                            <div class="sz-field sz-field-full">
+                                <label for="phone">Phone number</label>
+                                <input type="tel" id="phone"
+                                       name="phone"
+                                       placeholder="Enter your contact number"
+                                       autocomplete="tel"
+                                       inputmode="tel"
+                                       maxlength="15" required>
+                                <small>Use a number where the delivery team can reach you.</small>
+                            </div>
+
+                            <div class="sz-field sz-field-full">
+                                <label for="address">Street address</label>
+                                <textarea id="address" name="address"
+                                          rows="3"
+                                          placeholder="House number, building, street and area"
+                                          autocomplete="street-address"
+                                          maxlength="500" required></textarea>
+                            </div>
+
+                            <div class="sz-field">
+                                <label for="city">City</label>
+                                <input type="text" id="city" name="city"
+                                       placeholder="Your city"
+                                       autocomplete="address-level2"
+                                       maxlength="100" required>
+                            </div>
+
+                            <div class="sz-field">
+                                <label for="state">State</label>
+                                <input type="text" id="state" name="state"
+                                       placeholder="Your state"
+                                       autocomplete="address-level1"
+                                       maxlength="100" required>
+                            </div>
+
+                            <div class="sz-field sz-field-full">
+                                <label for="pincode">PIN code</label>
+                                <input type="text" id="pincode" name="pincode"
+                                       placeholder="6-digit PIN code"
+                                       autocomplete="postal-code"
+                                       inputmode="numeric"
+                                       maxlength="10" required>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="sz-checkout-card sz-payment-card">
+                        <div class="sz-checkout-card-heading">
+                            <div class="sz-checkout-number">02</div>
+                            <div>
+                                <h2>Payment preference</h2>
+                                <p>Choose how you intend to pay.</p>
+                            </div>
+                        </div>
+
+                        <div class="sz-payment-options">
+                            <label class="sz-payment-option">
+                                <input type="radio" name="payment_choice"
+                                       value="cod" checked>
+                                <span class="sz-payment-icon">₹</span>
+                                <span class="sz-payment-copy">
+                                    <strong>Cash on delivery</strong>
+                                    <small>Pay when your order arrives</small>
+                                </span>
+                                <span class="sz-payment-check">✓</span>
+                            </label>
+
+                            <label class="sz-payment-option">
+                                <input type="radio" name="payment_choice"
+                                       value="online">
+                                <span class="sz-payment-icon">◇</span>
+                                <span class="sz-payment-copy">
+                                    <strong>Online payment</strong>
+                                    <small>Gateway integration may be required</small>
+                                </span>
+                                <span class="sz-payment-check">✓</span>
+                            </label>
+                        </div>
+
+                        <p id="onlinePaymentNotice" class="sz-online-notice" hidden>
+                            Online payment is selected, but a payment gateway must be
+                            configured by the application before a real payment can be processed.
+                        </p>
+                    </section>
+
+                    <button type="submit" id="placeOrderButton"
+                            class="sz-place-order-btn">
+                        <span>Place my order</span>
+                        <span class="sz-place-order-arrow">→</span>
+                    </button>
+
+                    <p class="sz-checkout-footnote">
+                        Your order will be submitted securely to the ShopZone backend.
+                    </p>
+                </form>
+            </div>
+
+            <aside class="sz-checkout-summary-card">
+                <div class="sz-checkout-summary-glow"></div>
+
+                <div class="sz-summary-topline">
+                    <span class="sz-checkout-eyebrow">YOUR SELECTION</span>
+                    <span class="sz-summary-badge">SHOPZONE</span>
+                </div>
+
+                <h2>Order summary<span class="sz-checkout-gradient">.</span></h2>
+                <p class="sz-summary-intro">A final look at what's coming your way.</p>
+
+                <div id="orderSummary">
+                    <div class="sz-checkout-summary-loading">
+                        <div class="sz-checkout-spinner"></div>
+                        <span>Loading your order...</span>
+                    </div>
+                </div>
+
+                <div class="sz-checkout-benefit">
+                    <span>✦</span>
+                    <div>
+                        <strong>Made for a better shopping experience</strong>
+                        <p>Review your items before placing the order.</p>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+</section>
+
+<script>
+"use strict";
+
+let checkoutCartAvailable = false;
+let checkoutSubmitting = false;
+
+function checkoutEscape(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function(char) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[char];
+    });
+}
+
+function checkoutMoney(value) {
+    const number = Number(value);
+    return Number.isFinite(number)
+        ? number.toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })
+        : "0.00";
+}
+
+function checkoutToken() {
+    return localStorage.getItem("access");
+}
+
+async function loadCheckoutCart() {
+    const summary = document.getElementById("orderSummary");
+    const token = checkoutToken();
+
+    checkoutCartAvailable = false;
+
+    if (!token) {
+        summary.innerHTML = `
+            <div class="sz-summary-empty">
+                <p>Please sign in to load your cart.</p>
+                <a href="/login/" class="sz-summary-action">Sign in →</a>
+            </div>`;
+        showCheckoutMessage("Please log in before checkout.", "error");
+        document.getElementById("placeOrderButton").disabled = true;
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/cart/", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        let data = {};
+        try {
+            data = await response.json();
+        } catch (_) {}
+
+        if (response.status === 401) {
+            throw new Error("Your session may have expired. Please sign in again.");
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || data.detail || "Unable to load your cart."
+            );
+        }
+
+        const items = Array.isArray(data.items) ? data.items : [];
+
+        if (items.length === 0) {
+            summary.innerHTML = `
+                <div class="sz-summary-empty">
+                    <div class="sz-summary-empty-icon">🛍</div>
+                    <h3>Your cart is empty</h3>
+                    <p>Add some products before checking out.</p>
+                    <a href="/" class="sz-summary-action">Explore products →</a>
+                </div>`;
+            document.getElementById("placeOrderButton").disabled = true;
+            return;
+        }
+
+        let itemCount = 0;
+
+        const itemHTML = items.map(function(item) {
+            const quantity = Number(item.quantity);
+            itemCount += Number.isSafeInteger(quantity) && quantity > 0
+                ? quantity : 0;
+
+            return `
+                <div class="sz-checkout-product">
+                    <div class="sz-checkout-product-art">
+                        <span>SZ</span>
+                        <small>×${checkoutEscape(item.quantity)}</small>
+                    </div>
+                    <div class="sz-checkout-product-info">
+                        <strong>${checkoutEscape(item.product_name || "Product")}</strong>
+                        <span>₹${checkoutMoney(item.price)} each</span>
+                    </div>
+                    <strong class="sz-checkout-product-total">
+                        ₹${checkoutMoney(item.total_price)}
+                    </strong>
+                </div>`;
+        }).join("");
+
+        summary.innerHTML = `
+            <div class="sz-checkout-product-list">${itemHTML}</div>
+
+            <div class="sz-checkout-summary-row">
+                <span>Product types</span>
+                <strong>${items.length}</strong>
+            </div>
+
+            <div class="sz-checkout-summary-row">
+                <span>Total quantity</span>
+                <strong>${itemCount}</strong>
+            </div>
+
+            <div class="sz-checkout-summary-row">
+                <span>Delivery</span>
+                <strong class="sz-checkout-free">FREE*</strong>
+            </div>
+
+            <div class="sz-checkout-summary-divider"></div>
+
+            <div class="sz-checkout-grand-total">
+                <span>Cart total</span>
+                <strong>₹${checkoutMoney(data.total_price)}</strong>
+            </div>
+
+            <p class="sz-checkout-total-note">
+                Final amount is subject to server-side validation.
+            </p>`;
+
+        checkoutCartAvailable = true;
+        document.getElementById("placeOrderButton").disabled = false;
+
+    } catch (error) {
+        console.error("Checkout cart error:", error);
+
+        summary.innerHTML = `
+            <div class="sz-summary-empty">
+                <h3>Unable to load your cart</h3>
+                <p>${checkoutEscape(error.message)}</p>
+                <button type="button" class="sz-summary-action"
+                        onclick="loadCheckoutCart()">Try again ↻</button>
+                <p><a href="/login/">Sign in</a> if your session expired.</p>
+            </div>`;
+
+        document.getElementById("placeOrderButton").disabled = true;
+        showCheckoutMessage(error.message, "error");
+    }
+}
+
+function selectedPaymentMethod() {
+    return document.querySelector(
+        'input[name="payment_choice"]:checked'
+    )?.value || "cod";
+}
+
+document.querySelectorAll('input[name="payment_choice"]').forEach(function(input) {
+    input.addEventListener("change", function() {
+        document.getElementById("onlinePaymentNotice").hidden =
+            selectedPaymentMethod() !== "online";
+    });
+});
+
+async function placeOrder(event) {
+    event.preventDefault();
+
+    if (checkoutSubmitting) return;
+
+    if (!checkoutToken()) {
+        showCheckoutMessage("Please sign in before placing your order.", "error");
+        return;
+    }
+
+    if (!checkoutCartAvailable) {
+        showCheckoutMessage("Your cart must load successfully before checkout.", "error");
+        return;
+    }
+
+    const form = document.getElementById("checkoutForm");
+
+    if (!form.reportValidity()) return;
+
+    const fullName = document.getElementById("full_name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const address = document.getElementById("address").value.trim();
+    const city = document.getElementById("city").value.trim();
+    const state = document.getElementById("state").value.trim();
+    const pincode = document.getElementById("pincode").value.trim();
+    const paymentMethod = selectedPaymentMethod();
+
+    if (!fullName || !phone || !address || !city || !state || !pincode) {
+        showCheckoutMessage("Please complete all delivery fields.", "error");
+        return;
+    }
+
+    if (paymentMethod === "online") {
+        showCheckoutMessage(
+            "Online payment is not confirmed as configured. Please choose Cash on Delivery unless your backend has a working payment gateway.",
+            "error"
+        );
+        return;
+    }
+
+    checkoutSubmitting = true;
+
+    const button = document.getElementById("placeOrderButton");
+    button.disabled = true;
+    button.innerHTML = `<span>Placing your order...</span><span>…</span>`;
+
+    try {
+        const response = await fetch("/api/orders/create/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${checkoutToken()}`
+            },
+            body: JSON.stringify({
+                full_name: fullName,
+                phone: phone,
+                address: address,
+                city: city,
+                state: state,
+                pincode: pincode,
+                payment_method: paymentMethod
+            })
+        });
+
+        let data = {};
+        try {
+            data = await response.json();
+        } catch (_) {}
+
+        if (response.status === 401) {
+            throw new Error("Your session may have expired. Please sign in again.");
+        }
+
+        if (!response.ok) {
+            const detail = data.error || data.detail || data.message;
+            let fieldError = "";
+
+            if (!detail && data && typeof data === "object") {
+                fieldError = Object.entries(data)
+                    .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(", ") : value}`)
+                    .join(" | ");
+            }
+
+            throw new Error(detail || fieldError || "Unable to place your order.");
+        }
+
+        showCheckoutMessage("Order placed successfully. Opening your orders...", "success");
+        window.location.href = "/orders/";
+
+    } catch (error) {
+        console.error("Order submission error:", error);
+        showCheckoutMessage(error.message || "Something went wrong while placing your order.", "error");
+    } finally {
+        checkoutSubmitting = false;
+        button.disabled = !checkoutCartAvailable;
+        button.innerHTML = `<span>Place my order</span><span class="sz-place-order-arrow">→</span>`;
+    }
+}
+
+let checkoutMessageTimer;
+
+function showCheckoutMessage(message, type) {
+    const box = document.getElementById("checkoutMessage");
+
+    clearTimeout(checkoutMessageTimer);
+    box.textContent = message;
+    box.className = `sz-checkout-message ${type}`;
+
+    if (message) {
+        box.scrollIntoView({behavior: "smooth", block: "nearest"});
+    }
+
+    checkoutMessageTimer = setTimeout(function() {
+        box.textContent = "";
+        box.className = "sz-checkout-message";
+    }, 5000);
+}
+
+loadCheckoutCart();
+</script>
+{% endblock %}

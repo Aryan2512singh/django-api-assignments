@@ -1,0 +1,257 @@
+
+{% extends "base.html" %}
+
+{% block title %}Discover Products — ShopZone{% endblock %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="container hero-content">
+
+        <div class="hero-copy">
+            <span class="hero-eyebrow">
+                ✦ YOUR NEXT FAVORITE THING
+            </span>
+
+            <h1>
+                Find your next
+                <span class="gradient-text">favorite.</span>
+            </h1>
+
+            <p>
+                Discover products worth loving.
+                Explore our collection and find something made for you.
+            </p>
+
+            <a href="#products" class="btn hero-btn">
+                Explore collection <span>↘</span>
+            </a>
+
+            <div class="hero-trust">
+                <span>✦ Curated products</span>
+                <span>✦ Simple shopping</span>
+                <span>✦ Shop your way</span>
+            </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+            <div class="hero-orbit orbit-one"></div>
+            <div class="hero-orbit orbit-two"></div>
+
+            <div class="hero-glass-card">
+                <span class="hero-card-sparkle">✦</span>
+                <div class="hero-card-symbol">S</div>
+                <span class="hero-card-label">THE SHOPZONE EDIT</span>
+                <h3>Good finds.<br>Great feeling.</h3>
+                <span class="hero-card-bottom">DISCOVER SOMETHING NEW ↗</span>
+            </div>
+
+            <div class="floating-chip chip-top">✦ Discover</div>
+            <div class="floating-chip chip-bottom">Your next find awaits.</div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- PRODUCTS SECTION -->
+<section class="products-section" id="products">
+    <div class="container">
+
+        <div class="products-heading-row">
+            <div>
+                <span class="section-eyebrow">THE COLLECTION</span>
+                <h2>Explore <span class="gradient-text">our products.</span></h2>
+                <p class="section-description">
+                    Find the things you'll love having around.
+                </p>
+            </div>
+
+            <div class="product-count">
+                <span class="count-dot"></span>
+                <span id="productCount">{{ products|length }} products</span>
+            </div>
+        </div>
+
+
+        <!-- SEARCH -->
+        <div class="product-toolbar">
+            <div class="search-wrapper">
+                <span class="search-icon" aria-hidden="true">⌕</span>
+
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search by product name..."
+                    aria-label="Search products by name"
+                    autocomplete="off"
+                >
+
+                <span class="search-shortcut">SEARCH</span>
+            </div>
+
+            <span class="toolbar-note">
+                <span aria-hidden="true">✦</span> Find your next favorite
+            </span>
+        </div>
+
+
+        <!-- PRODUCT GRID -->
+        <div class="products-grid" id="productContainer">
+
+            {% for product in products %}
+
+            <article
+                class="product-card"
+                data-name="{{ product.name|lower }}"
+                data-category="{{ product.category.name|default:''|lower }}"
+            >
+
+                <a
+                    href="{% url 'product-detail-page' product.id %}"
+                    class="product-image product-image-link"
+                    aria-label="View {{ product.name }}"
+                >
+
+                    {% if product.image %}
+
+                    <img
+                        src="{{ product.image.url }}"
+                        alt="{{ product.name }}"
+                        loading="lazy"
+                    >
+
+                    {% else %}
+
+                    <div class="no-image">
+                        <span class="no-image-symbol">S</span>
+                        <span>Image coming soon</span>
+                    </div>
+
+                    {% endif %}
+
+                    <span class="image-corner-icon" aria-hidden="true">↗</span>
+                </a>
+
+
+                <div class="product-info">
+
+                    <div class="product-meta">
+                        <span class="category">
+                            {{ product.category.name|default:"General" }}
+                        </span>
+
+                        <span class="product-index">
+                            {% if forloop.counter < 10 %}0{% endif %}{{ forloop.counter }}
+                        </span>
+                    </div>
+
+                    <h3>
+                        <a
+                            href="{% url 'product-detail-page' product.id %}"
+                            class="product-title-link"
+                        >
+                            {{ product.name }}
+                        </a>
+                    </h3>
+
+                    <p class="description">
+                        {{ product.description|default:"A great find from our collection."|truncatewords:15 }}
+                    </p>
+
+                    <div class="product-bottom">
+
+                        <div class="price-block">
+                            <span class="price-label">PRICE</span>
+                            <span class="price">₹{{ product.price }}</span>
+                        </div>
+
+                        <a
+                            href="{% url 'product-detail-page' product.id %}"
+                            class="btn product-view-btn"
+                        >
+                            Discover <span aria-hidden="true">↗</span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% empty %}
+
+            <div class="empty-products">
+                <div class="empty-products-icon">✦</div>
+                <h3>Your collection starts here.</h3>
+                <p>There aren't any products to display just yet. Check back soon.</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- SEARCH EMPTY STATE -->
+        <div class="search-empty" id="searchEmpty" hidden>
+            <div class="empty-products-icon">⌕</div>
+            <h3>No matching products.</h3>
+            <p>Try another search term to explore the collection.</p>
+
+            <button type="button" class="btn" id="clearSearch">
+                Clear search <span aria-hidden="true">↻</span>
+            </button>
+        </div>
+
+    </div>
+</section>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchInput");
+    const productCards = Array.from(
+        document.querySelectorAll(".product-card")
+    );
+    const productCount = document.getElementById("productCount");
+    const searchEmpty = document.getElementById("searchEmpty");
+    const clearSearch = document.getElementById("clearSearch");
+
+    function filterProducts() {
+        const searchValue = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        productCards.forEach(function (card) {
+            const productName = card.dataset.name || "";
+            const productCategory = card.dataset.category || "";
+
+            const matches =
+                productName.includes(searchValue) ||
+                productCategory.includes(searchValue);
+
+            card.hidden = !matches;
+
+            if (matches) {
+                visibleCount++;
+            }
+        });
+
+        productCount.textContent =
+            visibleCount + (visibleCount === 1 ? " product" : " products");
+
+        searchEmpty.hidden =
+            visibleCount !== 0 || productCards.length === 0;
+    }
+
+    searchInput.addEventListener("input", filterProducts);
+
+    clearSearch.addEventListener("click", function () {
+        searchInput.value = "";
+        filterProducts();
+        searchInput.focus();
+    });
+});
+</script>
+
+{% endblock %}
